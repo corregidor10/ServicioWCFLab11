@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="cursosSPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="idAlumno" />
+          </Key>
+          <Property Name="idAlumno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="apellidos" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="edad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AlumnoCurso">
+          <Key>
+            <PropertyRef Name="idAlumno" />
+            <PropertyRef Name="idCurso" />
+          </Key>
+          <Property Name="idAlumno" Type="int" Nullable="false" />
+          <Property Name="idCurso" Type="int" Nullable="false" />
+          <Property Name="nota" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Curso">
+          <Key>
+            <PropertyRef Name="idCurso" />
+          </Key>
+          <Property Name="idCurso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="inicio" Type="date" Nullable="false" />
+          <Property Name="fin" Type="date" />
+          <Property Name="duracion" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AlumnoCurso_Alumno">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="1" />
+          <End Role="AlumnoCurso" Type="Self.AlumnoCurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="idAlumno" />
+            </Principal>
+            <Dependent Role="AlumnoCurso">
+              <PropertyRef Name="idAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlumnoCurso_Curso">
+          <End Role="Curso" Type="Self.Curso" Multiplicity="1" />
+          <End Role="AlumnoCurso" Type="Self.AlumnoCurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curso">
+              <PropertyRef Name="idCurso" />
+            </Principal>
+            <Dependent Role="AlumnoCurso">
+              <PropertyRef Name="idCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cursosSPModelStoreContainer">
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlumnoCurso" EntityType="Self.AlumnoCurso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Curso" EntityType="Self.Curso" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AlumnoCurso_Alumno" Association="Self.FK_AlumnoCurso_Alumno">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="AlumnoCurso" EntitySet="AlumnoCurso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlumnoCurso_Curso" Association="Self.FK_AlumnoCurso_Curso">
+            <End Role="Curso" EntitySet="Curso" />
+            <End Role="AlumnoCurso" EntitySet="AlumnoCurso" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="cursosSPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="idAlumno" />
+          </Key>
+          <Property Name="idAlumno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="apellidos" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="edad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AlumnoCurso" Relationship="Self.FK_AlumnoCurso_Alumno" FromRole="Alumno" ToRole="AlumnoCurso" />
+        </EntityType>
+        <EntityType Name="AlumnoCurso">
+          <Key>
+            <PropertyRef Name="idAlumno" />
+            <PropertyRef Name="idCurso" />
+          </Key>
+          <Property Name="idAlumno" Type="Int32" Nullable="false" />
+          <Property Name="idCurso" Type="Int32" Nullable="false" />
+          <Property Name="nota" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Alumno" Relationship="Self.FK_AlumnoCurso_Alumno" FromRole="AlumnoCurso" ToRole="Alumno" />
+          <NavigationProperty Name="Curso" Relationship="Self.FK_AlumnoCurso_Curso" FromRole="AlumnoCurso" ToRole="Curso" />
+        </EntityType>
+        <EntityType Name="Curso">
+          <Key>
+            <PropertyRef Name="idCurso" />
+          </Key>
+          <Property Name="idCurso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="inicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fin" Type="DateTime" Precision="0" />
+          <Property Name="duracion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AlumnoCurso" Relationship="Self.FK_AlumnoCurso_Curso" FromRole="Curso" ToRole="AlumnoCurso" />
+        </EntityType>
+        <Association Name="FK_AlumnoCurso_Alumno">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="1" />
+          <End Role="AlumnoCurso" Type="Self.AlumnoCurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="idAlumno" />
+            </Principal>
+            <Dependent Role="AlumnoCurso">
+              <PropertyRef Name="idAlumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AlumnoCurso_Curso">
+          <End Role="Curso" Type="Self.Curso" Multiplicity="1" />
+          <End Role="AlumnoCurso" Type="Self.AlumnoCurso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curso">
+              <PropertyRef Name="idCurso" />
+            </Principal>
+            <Dependent Role="AlumnoCurso">
+              <PropertyRef Name="idCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="cursosSPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" />
+          <EntitySet Name="AlumnoCurso" EntityType="Self.AlumnoCurso" />
+          <EntitySet Name="Curso" EntityType="Self.Curso" />
+          <AssociationSet Name="FK_AlumnoCurso_Alumno" Association="Self.FK_AlumnoCurso_Alumno">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="AlumnoCurso" EntitySet="AlumnoCurso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AlumnoCurso_Curso" Association="Self.FK_AlumnoCurso_Curso">
+            <End Role="Curso" EntitySet="Curso" />
+            <End Role="AlumnoCurso" EntitySet="AlumnoCurso" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="cursosSPModelStoreContainer" CdmEntityContainer="cursosSPEntities">
+          <EntitySetMapping Name="Alumno">
+            <EntityTypeMapping TypeName="cursosSPModel.Alumno">
+              <MappingFragment StoreEntitySet="Alumno">
+                <ScalarProperty Name="idAlumno" ColumnName="idAlumno" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+                <ScalarProperty Name="edad" ColumnName="edad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlumnoCurso">
+            <EntityTypeMapping TypeName="cursosSPModel.AlumnoCurso">
+              <MappingFragment StoreEntitySet="AlumnoCurso">
+                <ScalarProperty Name="idAlumno" ColumnName="idAlumno" />
+                <ScalarProperty Name="idCurso" ColumnName="idCurso" />
+                <ScalarProperty Name="nota" ColumnName="nota" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Curso">
+            <EntityTypeMapping TypeName="cursosSPModel.Curso">
+              <MappingFragment StoreEntitySet="Curso">
+                <ScalarProperty Name="idCurso" ColumnName="idCurso" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="inicio" ColumnName="inicio" />
+                <ScalarProperty Name="fin" ColumnName="fin" />
+                <ScalarProperty Name="duracion" ColumnName="duracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
